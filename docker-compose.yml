@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: zhao1290
+      MYSQL_DATABASE: price_compare
+    ports:
+      - "3309:3306"  # 将容器内的 3306 端口映射到主机的 3309 端口
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]  # 使用 mysqladmin 进行健康检查
+      interval: 10s  # 每隔 10 秒检查一次
+      retries: 5  # 重试 5 次
+      start_period: 30s  # 容器启动后等待 30 秒再开始健康检查
+      timeout: 10s  # 每次检查超时 10 秒
+
+  backend:
+    build:
+      context: ./PriceComWebBackend
+      dockerfile: Dockerfile
+    container_name: pricecom_backend
+    ports:
+      - "8082:8082"
+    depends_on:
+      db:
+        condition: service_healthy  # 等待 db 服务健康
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/price_compare?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: zhao1290
+      SPRING_MAIL_USERNAME: zjubszjl@163.com
+      SPRING_MAIL_PASSWORD: CZaRY36PTYuw8yd6
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_HOST: smtp.163.com
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: true
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE: true
+
+  frontend:
+    build:
+      context: ./PriceComWebFrontend
+      dockerfile: Dockerfile
+    container_name: pricecom_frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    environment:
+      VUE_APP_API_BASE_URL: http://localhost:8082
+
+volumes:
+  db_data:
