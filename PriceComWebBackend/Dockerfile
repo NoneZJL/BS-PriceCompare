@@ -1,6 +1,8 @@
 # 使用官方的 Java 镜像作为基础镜像
 FROM openjdk:17-jdk-slim
 
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/' /etc/apt/sources.list
+
 # 安装必要的依赖，包括 libglib 和其他缺少的库
 RUN apt-get update && apt-get install -y \
     libglib2.0-0 \
@@ -13,13 +15,40 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     libxi6 \
     libxtst6 \
-    && rm -rf /var/lib/apt/lists/*
+    wget \
+    unzip \
+    curl \
+    ca-certificates \
+    gnupg \
+    fonts-liberation \
+    libdrm2 \
+    libgbm1 \
+    libvulkan1 \
+    xdg-utils
+
+# 安装edge
+## Setup
+# RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+# RUN install -o root -g root -m 644 microsoft.gpg /usr/share/keyrings/
+# RUN sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-beta.list'
+# RUN rm microsoft.gpg
+# ## Install
+# RUN apt-get update
+# RUN apt-get install -y microsoft-edge-beta
+
+
+# 安装 Microsoft Edge 浏览器
+RUN curl https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_131.0.2903.86-1_amd64.deb -o microsoft-edge-stable.deb && \
+    dpkg -i microsoft-edge-stable.deb && \
+    apt-get update && \
+    apt-get -f install && \
+    rm microsoft-edge-stable.deb
 
 # 如果需要安装 msedgedriver
-RUN apt-get install -y wget
-RUN wget https://msedgedriver.azureedge.net/131.0.2903.87/edgedriver_linux64.zip
-RUN unzip edgedriver_linux64.zip
-RUN mv msedgedriver /usr/local/bin
+RUN wget https://msedgedriver.azureedge.net/131.0.2903.87/edgedriver_linux64.zip && \
+    unzip edgedriver_linux64.zip && \
+    mv msedgedriver /usr/local/bin/ && \
+    rm edgedriver_linux64.zip
 
 # 设置工作目录
 WORKDIR /app
