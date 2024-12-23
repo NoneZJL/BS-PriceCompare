@@ -162,6 +162,9 @@ onMounted(async () => {
     const JDgoodList = JDanswer.data.payload
     jdProducts.value = JDgoodList.map((item) => item)
     queryStore.setJdProducts(jdProducts.value)
+    if (jdProducts.value.length === 0) {
+      ElMessage.error('京东商品数据获取失败')
+    }
     // loading.close()
     // SN
     const SNanswer = await snGetGoodsBySearchingNameService(nowSearching.value)
@@ -177,6 +180,9 @@ onMounted(async () => {
     const SNgoodList = SNanswer.data.payload
     snProducts.value = SNgoodList.map((item) => item)
     queryStore.setSnProducts(snProducts.value)
+    if (snProducts.value.length === 0) {
+      ElMessage.error('苏宁商品数据获取失败')
+    }
     // WPH
     const WPHanswer = await wphGetGoodsBySearchingNameService(nowSearching.value)
     if (WPHanswer.data.code === 2) {
@@ -191,6 +197,9 @@ onMounted(async () => {
     const WPHgoodList = WPHanswer.data.payload
     wphProducts.value = WPHgoodList.map((item) => item)
     queryStore.setWphProducts(wphProducts.value)
+    if (wphProducts.value.length === 0) {
+      ElMessage.error('小米有品商品数据获取失败')
+    }
     loading.close()
   }
   activeWebsite.value = 'jd'
@@ -320,6 +329,9 @@ const handleSearch = async () => {
   const JDgoodList = JDanswer.data.payload
   jdProducts.value = JDgoodList.map((item) => item)
   queryStore.setJdProducts(jdProducts.value)
+  if (jdProducts.value.length === 0) {
+    ElMessage.error('京东商品数据获取失败')
+  }
   // loading.close()
   // SN
   const SNanswer = await snGetGoodsBySearchingNameService(nowSearching.value)
@@ -336,6 +348,9 @@ const handleSearch = async () => {
   const SNgoodList = SNanswer.data.payload
   snProducts.value = SNgoodList.map((item) => item)
   queryStore.setSnProducts(snProducts.value)
+  if (snProducts.value.length === 0) {
+    ElMessage.error('苏宁商品数据获取失败')
+  }
   // WPH
   const WPHanswer = await wphGetGoodsBySearchingNameService(nowSearching.value)
   console.log(WPHanswer)
@@ -352,6 +367,9 @@ const handleSearch = async () => {
   const WPHgoodList = WPHanswer.data.payload
   wphProducts.value = WPHgoodList.map((item) => item)
   queryStore.setWphProducts(wphProducts.value)
+  if (wphProducts.value.length === 0) {
+    ElMessage.error('小米有品商品数据获取失败')
+  }
 
   loading.close()
   activeWebsite.value = 'jd'
