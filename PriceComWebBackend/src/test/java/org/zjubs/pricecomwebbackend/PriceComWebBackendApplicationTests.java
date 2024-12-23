@@ -35,32 +35,32 @@ class PriceComWebBackendApplicationTests {
 //		System.out.println(jwt);
 //	}
 
-	@Test
-	public void testJwt() {
-		String token = JWT.create()
-				.withClaim("id", 1)
-				.withClaim("username", "tom")
-				.withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
-				.sign(Algorithm.HMAC256("ZJUBS"));
+// 	@Test
+// 	public void testJwt() {
+// 		String token = JWT.create()
+// 				.withClaim("id", 1)
+// 				.withClaim("username", "tom")
+// 				.withExpiresAt(new Date(System.currentTimeMillis() + 3600 * 1000))
+// 				.sign(Algorithm.HMAC256("ZJUBS"));
 
-		System.out.println(token);
+// 		System.out.println(token);
 
-		JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256("ZJUBS")).build();
-		DecodedJWT decodesJWT = jwtVerifier.verify(token);
-		Integer id = decodesJWT.getClaim("id").asInt();
-		String username = decodesJWT.getClaim("username").asString();
-		Date expiresAt = decodesJWT.getExpiresAt();
-		System.out.println("id = " + id + ", username = " + username + ", end_time = " + expiresAt);
-	}
+// 		JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256("ZJUBS")).build();
+// 		DecodedJWT decodesJWT = jwtVerifier.verify(token);
+// 		Integer id = decodesJWT.getClaim("id").asInt();
+// 		String username = decodesJWT.getClaim("username").asString();
+// 		Date expiresAt = decodesJWT.getExpiresAt();
+// 		System.out.println("id = " + id + ", username = " + username + ", end_time = " + expiresAt);
+// 	}
 
-	@Test
-	public void sendEmail() {
-//		userService.sendEmailJustifyCode("1445675246@qq.com");
-		userService.sendEmailJustifyCode("1290217090@qq.com");
-	}
+// 	@Test
+// 	public void sendEmail() {
+// //		userService.sendEmailJustifyCode("1445675246@qq.com");
+// 		userService.sendEmailJustifyCode("1290217090@qq.com");
+// 	}
 
-	@Test
-	public void sendReminderEmail() {
-		emailUtil.sendRemainderEmail("1290217090@qq.com","Macbook", 18888.0, 14999.0,"https://item.jd.com/100100209772.html" );
-	}
+// 	@Test
+// 	public void sendReminderEmail() {
+// 		emailUtil.sendRemainderEmail("1290217090@qq.com","Macbook", 18888.0, 14999.0,"https://item.jd.com/100100209772.html" );
+// 	}
 }

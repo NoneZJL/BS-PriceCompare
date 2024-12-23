@@ -34,6 +34,10 @@ public class SnCrawlerUtil {
             EdgeOptions options = new EdgeOptions();
 //            options.setExperimentalOption("debuggerAddress", "127.0.0.1:9222");
             options.addArguments("--headless=old"); // 无头模式
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--headless");
+            options.addArguments("--no-sandbox");  // 解决某些沙箱问题
+            options.addArguments("--disable-dev-shm-usage");  // 解决 Docker 中的内存问题
 
             // 创建 WebDriver 对象
             WebDriver driver = new EdgeDriver(options);
